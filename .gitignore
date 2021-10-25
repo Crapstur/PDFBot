@@ -132,3 +132,13 @@ dmypy.json
 infos.json
 pdf/*
 reset.sh
+
+./pdf/*
+
+.gitignore
+
+infos.json
+
+reset.sh
+
+*token.pickle*

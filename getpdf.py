@@ -77,6 +77,23 @@ try:
 
     infos_file = './infos.json'
     infos = {}
+    
+    if not os.path.exists('./pdf'):
+        os.mkdir('./pdf')
+        logging.info(str(datetime.datetime.today()) + ' : Create folder [\"./pdf\"]')
+
+    if not os.path.exists('./pdf/downloads'):
+        os.mkdir('./pdf/downloads')
+        logging.info(str(datetime.datetime.today()) + ' : Create folder [\"./pdf/downloads\"]')
+
+    if not os.path.exists('./pdf/downloads/tmp'):
+        os.mkdir('./pdf/downloads/tmp')
+        logging.info(str(datetime.datetime.today()) + ' : Create folder [\"./pdf/downloads/tmp\"]')
+
+    if not os.path.exists('./pdf/downloads/files'):
+        os.mkdir('./pdf/downloads/files')
+        logging.info(str(datetime.datetime.today()) + ' : Create folder [\"./pdf/downloads/files\"]')
+
 
     if not os.path.exists(infos_file):
         os.mknod(infos_file)
