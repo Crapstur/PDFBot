@@ -16,6 +16,8 @@ from dotenv import load_dotenv
 logging.basicConfig(filename='/var/log/PDFBot/getpdf.log', level=logging.INFO)
 logging.info(str(datetime.datetime.today()) + ' : getpdf START')
 
+os.chdir('/home/userbot/PDFBot/')
+
 def ft_download(title_module, title_onglet):
     name_PDF = []
     ## Récupère tous les logo PDF ##
@@ -32,8 +34,8 @@ def ft_download(title_module, title_onglet):
     if len(PDFs) != 0:
         m = 0
         for PDF in PDFs:
-            tmp_file = "./pdf/downloads/tmp/"
-            files_file = "./pdf/downloads/files/"
+            tmp_file = "/home/userbot/PDFBot/pdf/downloads/tmp/"
+            files_file = "/home/userbot/PDFBot/pdf/downloads/files/"
             PDF.click()
             
             ## Attendre le temps du telechargement ##
@@ -67,9 +69,6 @@ def ft_download(title_module, title_onglet):
                     os.remove(tmp_file + file)
 
                 m += 1
-        
-        
-        
     return(0)
 
 try:
@@ -78,9 +77,10 @@ try:
     infos_file = './infos.json'
     infos = {}
     
+    
     if not os.path.exists('./pdf'):
         os.mkdir('./pdf')
-        logging.info(str(datetime.datetime.today()) + ' : Create folder [\"./pdf\"]')
+        logging.info(str(datetime.datetime.today()) + ' : Create folder [./pdf]')
 
     if not os.path.exists('./pdf/downloads'):
         os.mkdir('./pdf/downloads')
