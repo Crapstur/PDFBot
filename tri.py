@@ -16,6 +16,8 @@ infos = {}
 logging.basicConfig(filename='/var/log/PDFBot/tri.log', level=logging.INFO)
 logging.warning(str(datetime.datetime.today()) + ' : tri START')
 
+os.chdir('/home/userbot/PDFBot/')
+
 try:
     if os.path.exists(infos_file) and os.stat(infos_file).st_size != 0:
         with open(infos_file) as file:

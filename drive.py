@@ -16,6 +16,8 @@ SCOPES = ['https://www.googleapis.com/auth/drive']
 
 logging.basicConfig(filename='/var/log/PDFBot/drive.log', level=logging.INFO)
 
+os.chdir('/home/userbot/PDFBot/')
+
 def get_gdrive_service():
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
