@@ -123,92 +123,97 @@ try:
     driver = webdriver.Chrome('/usr/local/bin/chromedriver', options=options)
 
 
-    driver.maximize_window()
+    try:
+        driver.get(site)
+        driver.maximize_window()
 
-    driver.get(site)
+        connect = driver.find_element_by_class_name("potentialidp")
+        connect.click()
 
-    connect = driver.find_element_by_class_name("potentialidp")
-    connect.click()
+        login = driver.find_element_by_id("username")
+        login.send_keys(login_gpu)
 
-    login = driver.find_element_by_id("username")
-    login.send_keys(login_gpu)
+        passwd = driver.find_element_by_id("password")
+        passwd.send_keys(mdp_gpu)
 
-    passwd = driver.find_element_by_id("password")
-    passwd.send_keys(mdp_gpu)
+        connect_btn = driver.find_element_by_class_name("btn-submit")
+        connect_btn.click()
 
-    connect_btn = driver.find_element_by_class_name("btn-submit")
-    connect_btn.click()
-
-    imgs = driver.find_element_by_xpath('//img')
-    x = imgs.get_attribute('src').split('/')
-    y = x[-3]
-    if y != os.getenv('link_id'):
-        if y.isnumeric():
-            link_id = y
-            os.environ["link_id"] = link_id
-            dotenv.set_key('./.env', "link_id", os.environ["link_id"])
-        else:
-            sys.exit()
+        imgs = driver.find_element_by_xpath('//img')
+        x = imgs.get_attribute('src').split('/')
+        y = x[-3]
+        if y != os.getenv('link_id'):
+            if y.isnumeric():
+                link_id = y
+                os.environ["link_id"] = link_id
+                dotenv.set_key('./.env', "link_id", os.environ["link_id"])
+            else:
+                sys.exit()
 
 
-    pannel = driver.find_element_by_xpath('//button[@class="btn nav-link float-sm-left mr-1 btn-secondary"]')
-    if pannel.get_attribute('aria-expanded') == "false":
-        pannel.click()
+        pannel = driver.find_element_by_xpath('//button[@class="btn nav-link float-sm-left mr-1 btn-secondary"]')
+        if pannel.get_attribute('aria-expanded') == "false":
+            pannel.click()
 
-    ## Variables ##
-    i = 0
-    j = 0
-    k = 0
-    ###############
-
-    ## Récupérer tout les modules et les visiter un à un ##
-    ## Récuperer les modules ##
-    modules = []
-    modules_nav = driver.find_elements_by_xpath('//nav//ul//a[@class="list-group-item list-group-item-action  "]')
-    for module in modules_nav:
-        if module.get_attribute('data-parent-key') == "mycourses":
-            modules.append(module.get_attribute('href'))
-            
-
-    while i < len(modules):
-        driver.get(modules[i])
-        infos[unidecode.unidecode(driver.title[8:])] = {}
-        #ft_download()
+        ## Variables ##
+        i = 0
         j = 0
-        
-        ## Récupérer tout les onglets du module et les visiter un à un ##
-        onglets = []
-        titles_onglets = []
-        onglets_nav = driver.find_elements_by_xpath('//ul[@class="nav nav-tabs mb-3"]//li//a')
-        for onglet in onglets_nav:
-            if not onglet.get_attribute('class') == "nav-link disabled":
-                titles_onglets.append(unidecode.unidecode(onglet.get_attribute('title')))
-                if onglet.get_attribute('href') != None:
-                    onglets.append(onglet.get_attribute('href'))
-                elif onglet.get_attribute('class') == "nav-link active":
-                    onglets.append(driver.current_url)
+        k = 0
+        ###############
 
-        if len(onglets) != 0:
-            for j in range(len(onglets)): 
-                driver.get(onglets[j])
-                title_module = driver.title[8:].split(', Section')
-                #infos[title_module[0]][titles_onglets[j]] = {}     ## En cas de test a faire ##
-                infos[title_module[0]][titles_onglets[j]] = []
-                ft_download(title_module[0],titles_onglets[j])
-        i += 1
+        ## Récupérer tout les modules et les visiter un à un ##
+        ## Récuperer les modules ##
+        modules = []
+        modules_nav = driver.find_elements_by_xpath('//nav//ul//a[@class="list-group-item list-group-item-action  "]')
+        for module in modules_nav:
+            if module.get_attribute('data-parent-key') == "mycourses":
+                modules.append(module.get_attribute('href'))
+                
 
-    time.sleep(1)
+        while i < len(modules):
+            driver.get(modules[i])
+            infos[unidecode.unidecode(driver.title[8:])] = {}
+            #ft_download()
+            j = 0
+            
+            ## Récupérer tout les onglets du module et les visiter un à un ##
+            onglets = []
+            titles_onglets = []
+            onglets_nav = driver.find_elements_by_xpath('//ul[@class="nav nav-tabs mb-3"]//li//a')
+            for onglet in onglets_nav:
+                if not onglet.get_attribute('class') == "nav-link disabled":
+                    titles_onglets.append(unidecode.unidecode(onglet.get_attribute('title')))
+                    if onglet.get_attribute('href') != None:
+                        onglets.append(onglet.get_attribute('href'))
+                    elif onglet.get_attribute('class') == "nav-link active":
+                        onglets.append(driver.current_url)
 
-    ## Ferme toute les fenêtres ##
-    l = len(driver.window_handles)
-    while l > 0:
-        driver.switch_to.window(driver.window_handles[l - 1])
-        driver.close()
-        l -= 1
+            if len(onglets) != 0:
+                for j in range(len(onglets)): 
+                    driver.get(onglets[j])
+                    title_module = driver.title[8:].split(', Section')
+                    #infos[title_module[0]][titles_onglets[j]] = {}     ## En cas de test a faire ##
+                    infos[title_module[0]][titles_onglets[j]] = []
+                    ft_download(title_module[0],titles_onglets[j])
+            i += 1
 
-    with open(infos_file, 'w') as outfile:
-        json.dump(infos, outfile, indent=4)
+        time.sleep(1)
+
+        ## Ferme toute les fenêtres ##
+        l = len(driver.window_handles)
+        while l > 0:
+            driver.switch_to.window(driver.window_handles[l - 1])
+            l -= 1
+
+        with open(infos_file, 'w') as outfile:
+            json.dump(infos, outfile, indent=4)
+    except:
+        logging.error(str(datetime.datetime.today()) + ' : !! Site unreachable !!')
 except:
     logging.error(str(datetime.datetime.today()) + ' : !! ERROR !!')
 
 logging.info(str(datetime.datetime.today()) + ' : getpdf END')
+try:
+    driver.close()
+except:
+    pass
