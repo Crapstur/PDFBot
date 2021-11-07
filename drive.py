@@ -55,12 +55,11 @@ def search_id(item_name, item_type, item_parent_id):
     item_size = 0
     
     if not items:
-        ## LOG ##
+        logging.error(str(datetime.datetime.today()) + ' : Not item found')
         pass
     else:
         for item in items:
             try:
-                id_parent = item['parents']
                 if item['parents'] == [item_parent_id]:
                     if item['mimeType'] == item_type2:
                         if item['name'] == item_name:
@@ -75,6 +74,7 @@ def search_id(item_name, item_type, item_parent_id):
                     item_id = 'Null'
                 
             except:
+                logging.error(str(datetime.datetime.today()) + ' : !! ERROR [Search id] !!')
                 pass
         return(item_id)
 
