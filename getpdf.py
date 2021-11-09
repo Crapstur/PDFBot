@@ -15,7 +15,7 @@ from selenium import webdriver
 from dotenv import load_dotenv
 
 logging.basicConfig(filename='/var/log/PDFBot/getpdf.log', level=logging.INFO)
-logging.info(str(datetime.datetime.today()) + ' : getpdf START')
+logging.warning(str(datetime.datetime.today()) + ' : getpdf START')
 
 os.chdir('/home/userbot/PDFBot/')
 
