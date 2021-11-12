@@ -59,23 +59,22 @@ def search_id(item_name, item_type, item_parent_id):
         pass
     else:
         for item in items:
-            try:
-                if item['parents'] == [item_parent_id]:
-                    if item['mimeType'] == item_type2:
-                        if item['name'] == item_name:
-                            item_id = item['id']
-                            found = True
-                            break
-                
-                if found == True:
-                    break
-                
-                if found == False:
-                    item_id = 'Null'
-                
-            except:
-                logging.error(str(datetime.datetime.today()) + ' : !! ERROR [Search id] !!')
-                pass
+                try:
+                    if item['parents'] == [item_parent_id]:
+                        if item['mimeType'] == item_type2:
+                            if item['name'] == item_name:
+                                item_id = item['id']
+                                found = True
+                                break
+                    
+                    if found == True:
+                        break
+                    
+                    if found == False:
+                        item_id = 'Null'
+                    
+                except:
+                    pass
         return(item_id)
 
 def upload_file(file_name, file_parent_id, srv_path):
@@ -196,6 +195,7 @@ if __name__ == '__main__':
                             if int(srv_file_size) != int(drv_file_size):
                                 remove_file(drv_file_id, file)
                                 upload_file(file, parent_folder_id, srv_path)
+            #upload_file('drive.log', search_id('1_MOODLE', 'folder', os.getenv('parent_folder_id')), '/var/log/PDFBot/drive.log')
         else:
             ## Ecrire message dans Log ##
             logging.error(str(datetime.datetime.today()) + ' : !! No local folder Licence_ASSR_pdf !!')
