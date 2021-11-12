@@ -220,4 +220,4 @@ try:
 except:
     logging.error(str(datetime.datetime.today()) + ' : !! Chrome not closed !!')
 
-logging.info(str(datetime.datetime.today()) + ' : getpdf END')
+logging.warning(str(datetime.datetime.today()) + ' : getpdf END')
