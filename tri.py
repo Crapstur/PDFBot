@@ -6,8 +6,6 @@ import shutil
 import logging
 import datetime
 
-from icecream import ic
-
 fichier_base = './pdf/Licence_ASSR_pdf'
 infos_file = './infos.json'
 files_download = "./pdf/downloads/files/"
