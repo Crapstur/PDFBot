@@ -45,6 +45,8 @@ def search_id(item_name, item_type, item_parent_id):
         item_type2 = 'application/vnd.google-apps.folder'
     elif item_type == 'pdf':
         item_type2 = 'application/pdf'
+    elif item_type == 'log':
+        item_type2 = 'application/vnd.google-apps.document'
     
     service = get_gdrive_service()
     results = service.files().list(pageSize=1000, fields="nextPageToken, files(id,name,mimeType,parents)").execute()
@@ -77,12 +79,19 @@ def search_id(item_name, item_type, item_parent_id):
                     pass
         return(item_id)
 
-def upload_file(file_name, file_parent_id, srv_path):
+def upload_file(file_name, file_parent_id, srv_path, item_type):
+    if item_type == 'folder' :
+        item_type2 = 'application/vnd.google-apps.folder'
+    elif item_type == 'pdf':
+        item_type2 = 'application/pdf'
+    elif item_type == 'log':
+        item_type2 = 'application/vnd.google-apps.document'
+
     service = get_gdrive_service()
     
     file_metadata = {
         "name": file_name,
-        "mimeType": "application/pdf",
+        "mimeType": item_type2,
         "parents": [file_parent_id]
     }
     
@@ -187,19 +196,30 @@ if __name__ == '__main__':
                         drv_file_id = search_id(file, 'pdf', parent_folder_id)
                         
                         if drv_file_id == 'Null':
-                            upload_file(file, parent_folder_id, srv_path)
+                            file_type = file.split('.')[-1]
+                            upload_file(file, parent_folder_id, srv_path, file_type)
                         else:
                             drv_file_size = get_size(drv_file_id)
                             srv_file_size = os.stat(srv_path).st_size
                             
                             if int(srv_file_size) != int(drv_file_size):
                                 remove_file(drv_file_id, file)
-                                upload_file(file, parent_folder_id, srv_path)
-            #upload_file('drive.log', search_id('1_MOODLE', 'folder', os.getenv('parent_folder_id')), '/var/log/PDFBot/drive.log')
+                                file_type = file.split('.')[-1]
+                                upload_file(file, parent_folder_id, srv_path, file_type)
         else:
             ## Ecrire message dans Log ##
             logging.error(str(datetime.datetime.today()) + ' : !! No local folder Licence_ASSR_pdf !!')
-            pass
     except:
         logging.error(str(datetime.datetime.today()) + ' : !! ERROR !!')
+    
+    Moodle_id = search_id('1_MOODLE', 'folder', os.getenv('parent_folder_id'))
+    Log_file_id = search_id('drive.log', 'log', Moodle_id)
+    
+    try:
+        remove_file(Log_file_id, 'drive.log')
+    except:
+        pass
+    
+    upload_file('drive.log', '1b2M4hKZAdvekQ_he5E5Wh2dP7heO1_Tp', '/var/log/PDFBot/drive.log', 'log')
+    
     logging.warning(str(datetime.datetime.today()) + ' : DriveBot END')

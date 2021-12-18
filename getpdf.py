@@ -19,6 +19,8 @@ logging.warning(str(datetime.datetime.today()) + ' : getpdf START')
 
 os.chdir('/home/userbot/PDFBot/')
 
+page_ban = ['https://lms.univ-cotedazur.fr/course/view.php?id=16998', 'https://lms.univ-cotedazur.fr/course/view.php?id=7191&section=1#tabs-tree-start', 'https://lms.univ-cotedazur.fr/course/view.php?id=7191']
+
 def ft_download(title_module, title_onglet):
     name_PDF = []
     ## Récupère tous les logo PDF ##
@@ -126,32 +128,36 @@ try:
     except:
         logging.error(str(datetime.datetime.today()) + ' : !! Site unreachable !!')
         sys.exit()
-
+    print("A")
     driver.maximize_window()
-
+    print("B")
     connect = driver.find_element_by_class_name("potentialidp")
     connect.click()
-
+    print("C")
     login = driver.find_element_by_id("username")
     login.send_keys(login_gpu)
-
+    print("D")
     passwd = driver.find_element_by_id("password")
     passwd.send_keys(mdp_gpu)
-
+    print("E")
     connect_btn = driver.find_element_by_class_name("btn-submit")
     connect_btn.click()
-
+    print("F")
     imgs = driver.find_element_by_xpath('//img')
     x = imgs.get_attribute('src').split('/')
     y = x[-3]
+    print("G")
     if y != os.getenv('link_id'):
+        print("H")
         if y.isnumeric():
+            print("I")
             link_id = y
             os.environ["link_id"] = link_id
             dotenv.set_key('./.env', "link_id", os.environ["link_id"])
         else:
+            print("J")
             sys.exit()
-
+    print("K")
     ## Variables ##
     i = 0
     j = 0
@@ -170,12 +176,15 @@ try:
     btn_TOUT = driver.find_element_by_xpath("/html/body/div[2]/div[3]/div/div[2]/div/section[1]/div[2]/aside/section[2]/div/div/div[1]/div[2]/div/div/div[2]/div/div/div/div/a[2]")
     btn_TOUT.click()
 
-
+    print("L")
     modules_nav = driver.find_elements_by_xpath("//a[@class='aalink coursename']")
     for module in modules_nav:
-        modules.append(module.get_attribute('href'))
+        print(module.get_attribute('href'))
+        print(page_ban)
+        if module.get_attribute('href') not in page_ban:
+            modules.append(module.get_attribute('href'))
             
-
+    print("M")
     while i < len(modules):
         driver.get(modules[i])
         infos[unidecode.unidecode(driver.title[8:])] = {}
@@ -192,18 +201,29 @@ try:
                     onglets.append(onglet.get_attribute('href'))
                 elif onglet.get_attribute('class') == "nav-link active":
                     onglets.append(driver.current_url)
-
+        print("N")
         if len(onglets) != 0:
+            print("NA")
             for j in range(len(onglets)): 
+                print("NB")
                 driver.get(onglets[j])
+                print("NC")
                 title_module = driver.title[8:].split(', Section')
+                print("ND")
                 #infos[title_module[0]][titles_onglets[j]] = {}     ## En cas de test a faire ##
+                #print(infos)
+                #print(onglets)
+                #print(title_module[0])
+                #print(titles_onglets[j])
                 infos[title_module[0]][titles_onglets[j]] = []
+                print("NE")
+                print("Download: ", title_module[0], " | ", titles_onglets[j]) # Décommenter en cas de problème
                 ft_download(title_module[0],titles_onglets[j])
+                print("NF")
         i += 1
-
+    print("O")
     time.sleep(1)
-
+    print("P")
     ## Ferme toute les fenêtres ##
     l = len(driver.window_handles)
     while l > 0:
