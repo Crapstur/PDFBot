@@ -12,7 +12,7 @@ files_download = "./pdf/downloads/files/"
 infos = {}
 
 logging.basicConfig(filename='/var/log/PDFBot/tri.log', level=logging.INFO)
-logging.warning(str(datetime.datetime.today()) + ' : tri START')
+logging.warning(str(datetime.datetime.today()) + ' : Tri START')
 
 os.chdir('/home/userbot/PDFBot/')
 
@@ -50,4 +50,4 @@ try:
 except:
     logging.error(str(datetime.datetime.today()) + ' : !! ERROR !!')
 
-logging.warning(str(datetime.datetime.today()) + ' : tri END')
+logging.warning(str(datetime.datetime.today()) + ' : Tri END')
