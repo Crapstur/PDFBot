@@ -240,6 +240,8 @@ try:
 
     with open(infos_file, 'w') as outfile:
         json.dump(infos, outfile, indent=4)
+        
+    logging.info(str(datetime.datetime.today()) + ' : Finished without error')
 except:
     logging.error(str(datetime.datetime.today()) + ' : !! ERROR !!')
 
