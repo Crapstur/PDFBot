@@ -209,6 +209,7 @@ if __name__ == '__main__':
         else:
             ## Ecrire message dans Log ##
             logging.error(str(datetime.datetime.today()) + ' : !! No local folder Licence_ASSR_pdf !!')
+        logging.info(str(datetime.datetime.today()) + ' : Finished without error')
     except:
         logging.error(str(datetime.datetime.today()) + ' : !! ERROR !!')
     

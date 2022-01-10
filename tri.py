@@ -46,6 +46,7 @@ try:
                         shutil.move(pdf_file_src, pdf_file_dest)
                     else:
                         os.remove(pdf_file_src)
+    logging.info(str(datetime.datetime.today()) + ' : Finished without error')
 except:
     logging.error(str(datetime.datetime.today()) + ' : !! ERROR !!')
 
